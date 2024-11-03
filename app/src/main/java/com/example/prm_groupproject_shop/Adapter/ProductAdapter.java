@@ -41,6 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.tvProductName.setText(product.getProductName());
         holder.tvProdutDesription.setText(product.getProdutDesription());
         holder.tvProductPrice.setText(NumberFormat.getCurrencyInstance(Locale.getDefault()).format(product.getPrice()));
+        holder.tvProductQuantity.setText(NumberFormat.getCurrencyInstance(Locale.getDefault()).format(product.getProductQuantity()));
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProductDetailsActivity.class);
@@ -63,13 +64,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView tvProductName, tvProdutDesription, tvProductPrice;
+        TextView tvProductName, tvProdutDesription, tvProductPrice, tvProductQuantity;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProdutDesription = itemView.findViewById(R.id.tvProdutDesription);
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
+            tvProductQuantity = itemView.findViewById(R.id.tvProductQuantity);
         }
     }
 }

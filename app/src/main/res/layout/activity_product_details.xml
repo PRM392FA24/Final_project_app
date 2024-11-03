@@ -6,6 +6,13 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/tvProductNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Product Name:"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/tvProductName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,35 +20,48 @@
     android:text="Product Name" />
 
     <TextView
+        android:id="@+id/tvProduztDesriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description:"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/tvProdutDesription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_marginTop="8dp"
         android:text="Product Description" />
+
+    <TextView
+        android:id="@+id/tvProductPriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price:"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvProductPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_marginTop="8dp"
         android:text="Price" />
+
+    <TextView
+        android:id="@+id/tvProductQuantityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity:"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvProductQuantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_marginTop="8dp"
         android:text="Quantity" />
-
-    <Button
-        android:id="@+id/buttonAddProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Product"
-        android:layout_gravity="end"
-        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

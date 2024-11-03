@@ -22,7 +22,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewProducts;
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Handle error response
                     Toast.makeText(MainActivity.this,
                             "Error: " + response.code(),
                             Toast.LENGTH_SHORT).show();

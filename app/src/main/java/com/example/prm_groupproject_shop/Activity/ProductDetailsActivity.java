@@ -1,11 +1,7 @@
 package com.example.prm_groupproject_shop.Activity;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +18,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductDetailsActivity extends AppCompatActivity {
-    private TextView tvProductName, tvProdutDesription, tvProductPrice, tvProductQuantity;
-    private String productId;
+    private TextView tvProductName, tvProductDescription, tvProductPrice, tvProductQuantity;
+    private static final String TAG = "ProductDetailsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,47 +27,65 @@ public class ProductDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_details);
 
         tvProductName = findViewById(R.id.tvProductName);
-        tvProdutDesription = findViewById(R.id.tvProdutDesription);
+        tvProductDescription = findViewById(R.id.tvProdutDesription);
         tvProductPrice = findViewById(R.id.tvProductPrice);
         tvProductQuantity = findViewById(R.id.tvProductQuantity);
 
-        productId = getIntent().getStringExtra("PRODUCT_ID");
+        String productId = getIntent().getStringExtra("PRODUCT_ID");
+        Log.d(TAG, "Received Product ID: " + productId);
 
-        if (productId != null){
+        if (productId != null) {
             loadProductDetails(productId);
+        } else {
+            Log.e(TAG, "No Product ID received");
+            Toast.makeText(this, "Error: No product ID", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
     private void loadProductDetails(String productId) {
         ProductService productService = APIClient.getClient().create(ProductService.class);
         Call<APIResponse<Product>> call = productService.getProductById(productId);
+
+        Log.d(TAG, "Making API call for product ID: " + productId);
+
         call.enqueue(new Callback<APIResponse<Product>>() {
             @Override
             public void onResponse(Call<APIResponse<Product>> call, Response<APIResponse<Product>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    APIResponse<Product> apiResponse = response.body();
-//                    Product product = ProductMapper.fromDto(productDTO);
+                Log.d(TAG, "Received API response. Success: " + response.isSuccessful());
 
-                    if (apiResponse != null && apiResponse.get_data() != null) {
-                        Product product = apiResponse.get_data();
-                        tvProductName.setText(product.getProductName());
-                        tvProdutDesription.setText(product.getProdutDesription());
-                        tvProductPrice.setText(String.valueOf(product.getPrice()));
-                        tvProductQuantity.setText(String.valueOf(product.getQuantity()));
+                if (response.isSuccessful() && response.body() != null) {
+                    Product product = response.body().getData();
+                    if (product == null) {
+                        product = response.body().get_data();
                     }
 
+                    if (product != null) {
+                        Log.d(TAG, "Product data received: " + product.getProductName());
 
+                        tvProductName.setText(product.getProductName());
+                        tvProductDescription.setText(product.getProdutDesription());
+                        tvProductPrice.setText(String.format("%.2f", product.getPrice()));
+                        tvProductQuantity.setText(String.valueOf(product.getProductQuantity()));
+                    } else {
+                        Log.e(TAG, "Product data is null in response");
+                        Toast.makeText(ProductDetailsActivity.this,
+                                "Error: Product data not found",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 } else {
+                    Log.e(TAG, "API call failed with code: " + response.code());
                     Toast.makeText(ProductDetailsActivity.this,
-                            "Product not found",
+                            "Error loading product details",
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<APIResponse<Product>> call, Throwable t) {
+                Log.e(TAG, "API call failed", t);
                 Toast.makeText(ProductDetailsActivity.this,
-                        "Error: " + t.getMessage(),
+                        "Network error: " + t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });

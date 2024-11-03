@@ -1,7 +1,5 @@
 package com.example.prm_groupproject_shop.Factory;
 
-import android.content.Context;
-
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +30,6 @@ public class APIClient {
 
     private static OkHttpClient getUnsafeOkHttpClient() {
         try {
-            // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
@@ -50,11 +47,9 @@ public class APIClient {
                     }
             };
 
-            // Install the all-trusting trust manager
             final SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
-            // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder();

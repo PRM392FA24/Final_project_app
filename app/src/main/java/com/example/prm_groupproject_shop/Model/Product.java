@@ -4,7 +4,7 @@ public class Product {
     private String productId;
     private String productName;
     private String produtDesription;
-    private int quantity;
+    private int productQuantity;
     private double price;
 
     public String getProductId() {
@@ -25,11 +25,11 @@ public class Product {
     public void setProdutDesription(String produtDesription) {
         this.produtDesription = produtDesription;
     }
-    public int getQuantity() {
-        return quantity;
+    public int getProductQuantity() {
+        return productQuantity;
     }
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setProductQuantity(int productQuantity) {
+        this.productQuantity = productQuantity;
     }
     public double getPrice() {
         return price;
