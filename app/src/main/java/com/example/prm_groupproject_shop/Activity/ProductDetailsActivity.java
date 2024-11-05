@@ -2,13 +2,16 @@ package com.example.prm_groupproject_shop.Activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.prm_groupproject_shop.Adapter.CartSessionManager;
 import com.example.prm_groupproject_shop.DTOs.APIResponse;
 import com.example.prm_groupproject_shop.Factory.APIClient;
+import com.example.prm_groupproject_shop.Model.CartItem;
 import com.example.prm_groupproject_shop.Model.Product;
 import com.example.prm_groupproject_shop.R;
 import com.example.prm_groupproject_shop.Services.ProductService;
@@ -20,7 +23,8 @@ import retrofit2.Response;
 public class ProductDetailsActivity extends AppCompatActivity {
     private TextView tvProductName, tvProductDescription, tvProductPrice, tvProductQuantity;
     private static final String TAG = "ProductDetailsActivity";
-
+    private CartSessionManager cartManager;
+    private CartItem currentProduct;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tvProductDescription = findViewById(R.id.tvProdutDesription);
         tvProductPrice = findViewById(R.id.tvProductPrice);
         tvProductQuantity = findViewById(R.id.tvProductQuantity);
+
+
+        Button btnAddToCart = findViewById(R.id.buttonAddToCart);
+        cartManager = new CartSessionManager(this);  // Initialize your CartSessionManager here
+
+        btnAddToCart.setOnClickListener(view -> {
+            if (currentProduct != null) {
+                cartManager.addToCart(currentProduct);  // Add the product to the cart
+                Toast.makeText(ProductDetailsActivity.this, "Product added to cart", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ProductDetailsActivity.this, "Product data is unavailable", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         String productId = getIntent().getStringExtra("PRODUCT_ID");
         Log.d(TAG, "Received Product ID: " + productId);
@@ -41,6 +58,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "Error: No product ID", Toast.LENGTH_SHORT).show();
             finish();
         }
+
     }
 
     private void loadProductDetails(String productId) {
@@ -67,6 +85,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         tvProductDescription.setText(product.getProdutDesription());
                         tvProductPrice.setText(String.format("%.2f", product.getPrice()));
                         tvProductQuantity.setText(String.valueOf(product.getProductQuantity()));
+
+                        currentProduct = new CartItem(product.getProductId(), product.getProductName(),product.getProdutDesription(), product.getPrice(), 1);  // Set initial quantity to 1
+
                     } else {
                         Log.e(TAG, "Product data is null in response");
                         Toast.makeText(ProductDetailsActivity.this,
@@ -88,6 +109,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         "Network error: " + t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
+
+
+
         });
     }
 }
